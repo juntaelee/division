@@ -1,0 +1,25 @@
+$body-top: 53px;
+$nav-w: 250px;
+
+body {
+    padding-top: $body-top;
+}
+
+.container-fluid {
+    min-width: 1300px;
+}
+
+.sidebar {
+    position: fixed;
+    top: $body-top;  /* $body-top */
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-width: $nav-w;
+}
+
+.main {
+    margin-left: $nav-w;
+}
