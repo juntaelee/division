@@ -1,20 +1,21 @@
 <template>
     <div>
-        <dot-loader :color="color"></grid-loader>
+        <bounce-loader :color="color" :size="size"></grid-loader>
         <!-- <dot-loader :loading="loading" :color="color" :size="size"></dot-loader> -->
     </div>
 </template>
 
 <script>
-    import DotLoader from 'vue-spinner/src/DotLoader'
+    import BounceLoader from 'vue-spinner/src/BounceLoader'
     export default {
+        props: ['size'],
         data: function () {
             return {
                 color: '#0275d8'
             }
         },
         components: {
-            'dot-loader': DotLoader
+            'bounce-loader': BounceLoader
         }
     }
 </script>
