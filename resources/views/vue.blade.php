@@ -11,11 +11,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap4.min.css">
-    
 
     <!-- Scripts -->
     <script>
@@ -26,9 +21,18 @@
 </head>
 <body>
     <div id="app">
-        
+        <nav class="my-nav">
+            <ul class="d-flex flex-column nav nav-pills">
+                <li class="nav-item">
+                    <router-link to="/router1" class="nav-link">router#1</router-link>
+                    <router-link to="/router2" class="nav-link">router#2</router-link>
+                </li>
+            </ul>
+        </nav>
+        <div class="my-main">
+            <router-view></router-view>
+        </div>
     </div>
-    
     <script src="{{ mix('js/vue.js') }}"></script>
 </body>
 </html>

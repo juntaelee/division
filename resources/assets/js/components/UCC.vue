@@ -39,7 +39,7 @@
 
         <div class="card-block p-2">
             <div class="d-flex justify-content-center align-items-center p-4" v-if="ajaxing">
-                <my-spinner></my-spinner>
+                <my-spinner size="60px"></my-spinner>
             </div>
 
             <div class="d-flex justify-content-center align-items-center p-4" v-if="lists.length == 0 && !ajaxing">
@@ -214,6 +214,12 @@
                     this.total = response.data.total;
 
                     this.pagination();
+
+                    if (this.total != 0 && (this.lists).length == 0 && this.params.current != 1) {
+                        this.params.current = this.params.current - 1;
+
+                        this.list();
+                    }
                 })
                 .catch(error => {
                     this.ajaxing = false;
@@ -300,7 +306,6 @@
                 // 일반영상 한번에 등록 시 등록할 영상이 없는 경우
                 let _emptyAlertBox = function (param) {
                     return new Promise(function (resolve, reject) {
-                        console.log('_emptyAlertBox');
                         bootbox.alert({
                             closeButton: false,
                             backdrop: true,

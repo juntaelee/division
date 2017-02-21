@@ -14,8 +14,6 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" name="start" id="start-daterange" v-model="params.sDate"/>
                                 <span class="input-group-addon" aria-hidden="true" onclick="document.getElementById('start-daterange').focus()"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-
-                                
                             </div>
                         </div>
                         <div class="col-auto">
@@ -33,10 +31,13 @@
                             
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary" @click="status()"><i class="fa fa-search" aria-hidden="true"></i>검색</button>
+                            <div class="input-group">
+                                
+                                <button type="button" class="btn btn-primary" @click="status()"><i class="fa fa-search" aria-hidden="true"></i>검색</button>
+                                <my-spinner size="30px" v-if="ajaxing"></my-spinner>
+                            </div>
                         </div>
                     </div>
-
                     <table id="ucc-status-table" class="table table-striped table-bordered display compact" cellspacing="0" width="100%">
                         <tfoot>
                             <tr>
@@ -73,19 +74,14 @@
 </template>
 
 <script>
+    import spinner from './Spinner.vue'
     import axios from 'axios'
 
     export default {
         components: {
+            'my-spinner': spinner
         },
         data: function () {
-            let date = new Date();
-            let interval = '14';
-            let today = (date).getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-
-            date.setDate(date.getDate() - interval);
-            let pastday = (date).getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-
             return {
                 columns: [ "Youtube", "TVPot", "Pandora", "Naver", "Nate", "Cyworld", "Dailymotion", "Total" ],
                 dataTables: null,
@@ -94,28 +90,37 @@
                 total: [],
 
                 params: {
-                    sDate: pastday,
-                    eDate: today
+                    sDate: null,
+                    eDate: null
                 },
                 
                 ajaxing: false
             }
         },
-        mounted: function() {
+        mounted: function () {console.log('mount');
             let vm = this;
+            let date = new Date();
+            let interval = '14';
+
+            vm.params.eDate = (date).getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+
+            date.setDate(date.getDate() - interval);
+            vm.params.sDate = (date).getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
             $('#ucc-status').on('shown.bs.modal', function () {
+                
+
                 $('.input-daterange').unbind().datepicker({
                     format: 'yyyy-mm-dd',
                     language: 'kr',
                     todayHighlight: true,
                     endDate: vm.params.eDate
                 })
-                .on('changeDate', function() {
+                .on('changeDate', function () {
                     vm.params.sDate = $('#start-daterange').val();
                     vm.params.eDate = $('#end-daterange').val();
                 });
-
+                
                 vm.dataTables = $('#ucc-status-table').DataTable({
                     responsive: true,
                     paging: false,
@@ -198,6 +203,7 @@
              * UCC 현황 가져오기
              */
             status: function () {
+                this.ajaxing = true;
                 this.dataTables.clear().draw();
                 this.total = [];
 
@@ -212,9 +218,11 @@
                     this.total = response.data.total;
 
                     this.dataTables.rows.add(this.lists).draw();
+
+                    this.ajaxing = false;
                 })
                 .catch(error => {
-                    
+                    this.ajaxing = false;
                 });
             }
         }
